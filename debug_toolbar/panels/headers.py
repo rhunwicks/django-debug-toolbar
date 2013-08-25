@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 from debug_toolbar.panels import DebugPanel
 
@@ -10,7 +11,7 @@ class HeaderDebugPanel(DebugPanel):
     template = 'debug_toolbar/panels/headers.html'
     has_content = True
     # List of headers we want to display
-    header_filter = (
+    HEADERS = [
         'CONTENT_TYPE',
         'HTTP_ACCEPT',
         'HTTP_ACCEPT_CHARSET',
@@ -31,7 +32,7 @@ class HeaderDebugPanel(DebugPanel):
         'SERVER_PORT',
         'SERVER_PROTOCOL',
         'SERVER_SOFTWARE',
-    )
+    ]
 
     def nav_title(self):
         return _('HTTP Headers')
@@ -41,6 +42,14 @@ class HeaderDebugPanel(DebugPanel):
 
     def url(self):
         return ''
+
+    @property
+    def header_filter(self):
+        if hasattr(settings, 'DEBUG_TOOLBAR_CONFIG'):
+            extra_headers = settings.DEBUG_TOOLBAR_CONFIG.get('EXTRA_HEADERS', [])
+        else:
+            extra_headers = []
+        return self.HEADERS + extra_headers
 
     def process_request(self, request):
         self.headers = dict(

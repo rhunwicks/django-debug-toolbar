@@ -15,7 +15,7 @@ Currently, the following panels have been written and are working:
 - Django version
 - Request timer
 - A list of settings in settings.py
-- Common HTTP headers
+- HTTP headers
 - GET/POST/cookie/session variable display
 - Templates and context used, and their template paths
 - SQL queries including time to execute and links to EXPLAIN each query
@@ -124,6 +124,10 @@ The debug toolbar has two settings that can be set in ``settings.py``:
      provide your own method for displaying the toolbar which contains your
      custom logic. This method should return True or False.
 
+   * ``EXTRA_HEADERS``
+
+     An array of custom HTTP headers that you would like to monitor.
+
    * ``EXTRA_SIGNALS``
 
      An array of custom signals that might be in your project,
@@ -160,6 +164,7 @@ The debug toolbar has two settings that can be set in ``settings.py``:
        DEBUG_TOOLBAR_CONFIG = {
            'INTERCEPT_REDIRECTS': False,
            'SHOW_TOOLBAR_CALLBACK': custom_show_toolbar,
+           'EXTRA_HEADERS': ['HTTP_X_FORWARDED_PROTO'],
            'EXTRA_SIGNALS': ['myproject.signals.MySignal'],
            'HIDE_DJANGO_SQL': False,
            'TAG': 'div',
